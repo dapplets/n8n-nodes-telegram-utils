@@ -1,6 +1,5 @@
 import { validate3rd } from '@telegram-apps/init-data-node';
 import type {
-	IDataObject,
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
