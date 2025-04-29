@@ -1,5 +1,6 @@
 import { validate3rd } from '@telegram-apps/init-data-node';
 import type {
+	IDataObject,
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeType,
@@ -58,7 +59,7 @@ export class ValidateThirdParty implements INodeType {
 		let botId: number;
 		let isTestEnvironment: boolean;
 
-		const returnData: INodeExecutionData[] = [];
+		const returnData: IDataObject[] = [];
 
 		// Iterates over all input items and add the key "myString" with the
 		// value the parameter "myString" resolves to.
@@ -72,9 +73,7 @@ export class ValidateThirdParty implements INodeType {
 				await validate3rd(initData, botId, { test: isTestEnvironment });
 
 				returnData.push({
-					json: {
-						isValid: true,
-					},
+					isValid: true,
 				});
 			} catch (error) {
 				// This node should never fail but we want to showcase how
@@ -82,7 +81,6 @@ export class ValidateThirdParty implements INodeType {
 				if (this.continueOnFail()) {
 					returnData.push({
 						error: error.message,
-						json: { isValid: false },
 					});
 				} else {
 					throw new NodeOperationError(this.getNode(), error, {
@@ -92,6 +90,6 @@ export class ValidateThirdParty implements INodeType {
 			}
 		}
 
-		return [items];
+		return [this.helpers.returnJsonArray(returnData)];
 	}
 }
