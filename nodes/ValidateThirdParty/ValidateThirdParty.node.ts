@@ -59,7 +59,7 @@ export class ValidateThirdParty implements INodeType {
 		let botId: number;
 		let isTestEnvironment: boolean;
 
-		const returnData: IDataObject[] = [];
+		const returnData: INodeExecutionData[] = [];
 
 		// Iterates over all input items and add the key "myString" with the
 		// value the parameter "myString" resolves to.
@@ -73,14 +73,16 @@ export class ValidateThirdParty implements INodeType {
 				await validate3rd(initData, botId, { test: isTestEnvironment });
 
 				returnData.push({
-					isValid: true,
+					json: { isValid: true },
+					pairedItem: { item: itemIndex },
 				});
 			} catch (error) {
 				// This node should never fail but we want to showcase how
 				// to handle errors.
 				if (this.continueOnFail()) {
 					returnData.push({
-						error: error.message,
+						json: { error: error.message },
+						pairedItem: { item: itemIndex },
 					});
 				} else {
 					throw new NodeOperationError(this.getNode(), error, {
@@ -90,6 +92,6 @@ export class ValidateThirdParty implements INodeType {
 			}
 		}
 
-		return [this.helpers.returnJsonArray(returnData)];
+		return [returnData];
 	}
 }
