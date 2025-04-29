@@ -54,7 +54,6 @@ export class ValidateThirdParty implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 
-		let item: INodeExecutionData;
 		let initData: string;
 		let botId: number;
 		let isTestEnvironment: boolean;
@@ -69,8 +68,6 @@ export class ValidateThirdParty implements INodeType {
 				initData = this.getNodeParameter('initData', itemIndex, '') as string;
 				botId = this.getNodeParameter('botId', itemIndex, '') as number;
 				isTestEnvironment = this.getNodeParameter('isTestEnvironment', itemIndex, '') as boolean;
-
-				item = items[itemIndex];
 
 				await validate3rd(initData, botId, { test: isTestEnvironment });
 
