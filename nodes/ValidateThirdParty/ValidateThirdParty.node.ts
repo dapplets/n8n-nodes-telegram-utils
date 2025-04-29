@@ -74,8 +74,6 @@ export class ValidateThirdParty implements INodeType {
 
 				await validate3rd(initData, botId, { test: isTestEnvironment });
 
-				item.json.isValid = true;
-
 				returnData.push({
 					json: {
 						isValid: true,
@@ -86,10 +84,8 @@ export class ValidateThirdParty implements INodeType {
 				// to handle errors.
 				if (this.continueOnFail()) {
 					returnData.push({
-						json: {
-							isValid: false,
-							error: error.message
-						},
+						error: error.message,
+						json: { isValid: false },
 					});
 				} else {
 					throw new NodeOperationError(this.getNode(), error, {
