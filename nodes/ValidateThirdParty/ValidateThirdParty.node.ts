@@ -74,22 +74,16 @@ export class ValidateThirdParty implements INodeType {
 
 				item.json.isValid = true;
 			} catch (error) {
-				// This node should never fail but we want to showcase how
-				// to handle errors.
-				if (this.continueOnFail()) {
-					items.push({ json: { isValid: false }, error: error, pairedItem: itemIndex });
-				} else {
-					// Adding `itemIndex` allows other workflows to handle this error
-					if (error.context) {
-						// If the error thrown already contains the context property,
-						// only append the itemIndex
-						error.context.itemIndex = itemIndex;
-						throw error;
-					}
-					throw new NodeOperationError(this.getNode(), error, {
-						itemIndex,
-					});
+				// Adding `itemIndex` allows other workflows to handle this error
+				if (error.context) {
+					// If the error thrown already contains the context property,
+					// only append the itemIndex
+					error.context.itemIndex = itemIndex;
+					throw error;
 				}
+				throw new NodeOperationError(this.getNode(), error, {
+					itemIndex,
+				});
 			}
 		}
 

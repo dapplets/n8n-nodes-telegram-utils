@@ -1,6 +1,6 @@
 {
 	"name": "@dapplets/n8n-nodes-telegram-utils",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Validate init data from Telegram",
 	"keywords": [
 		"n8n-community-node-package"
