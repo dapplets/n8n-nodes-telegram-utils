@@ -59,6 +59,8 @@ export class ValidateThirdParty implements INodeType {
 		let botId: number;
 		let isTestEnvironment: boolean;
 
+		const returnData: INodeExecutionData[] = [];
+
 		// Iterates over all input items and add the key "myString" with the
 		// value the parameter "myString" resolves to.
 		// (This could be a different value for each item in case it contains an expression)
@@ -73,17 +75,27 @@ export class ValidateThirdParty implements INodeType {
 				await validate3rd(initData, botId, { test: isTestEnvironment });
 
 				item.json.isValid = true;
-			} catch (error) {
-				// Adding `itemIndex` allows other workflows to handle this error
-				if (error.context) {
-					// If the error thrown already contains the context property,
-					// only append the itemIndex
-					error.context.itemIndex = itemIndex;
-					throw error;
-				}
-				throw new NodeOperationError(this.getNode(), error, {
-					itemIndex,
+
+				returnData.push({
+					json: {
+						isValid: true,
+					},
 				});
+			} catch (error) {
+				// This node should never fail but we want to showcase how
+				// to handle errors.
+				if (this.continueOnFail()) {
+					returnData.push({
+						json: {
+							isValid: false,
+							error: error.message
+						},
+					});
+				} else {
+					throw new NodeOperationError(this.getNode(), error, {
+						itemIndex,
+					});
+				}
 			}
 		}
 
