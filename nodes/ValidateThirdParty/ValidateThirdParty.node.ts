@@ -82,6 +82,9 @@ export class ValidateThirdParty implements INodeType {
 					returnData.push({
 						json: { error: error.message },
 						pairedItem: { item: itemIndex },
+						error: new NodeOperationError(this.getNode(), error, {
+							itemIndex,
+						})
 					});
 				} else {
 					throw new NodeOperationError(this.getNode(), error, {
